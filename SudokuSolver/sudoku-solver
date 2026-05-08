@@ -1,0 +1,58 @@
+class Solution:
+    def solveSudoku(self, board):
+
+        def is_valid(row, col, num):
+
+            # Check row
+            for j in range(9):
+                if board[row][j] == num:
+                    return False
+
+            # Check column
+            for i in range(9):
+                if board[i][col] == num:
+                    return False
+
+            # Find 3x3 box start
+            box_row = (row // 3) * 3
+            box_col = (col // 3) * 3
+
+            # Check box
+            for i in range(box_row, box_row + 3):
+                for j in range(box_col, box_col + 3):
+                    if board[i][j] == num:
+                        return False
+
+            return True
+
+
+        def backtrack():
+
+            # Find empty cell
+            for i in range(9):
+                for j in range(9):
+
+                    if board[i][j] == ".":
+
+                        # Try numbers 1-9
+                        for num in "123456789":
+
+                            if is_valid(i, j, num):
+
+                                board[i][j] = num
+
+                                # Continue recursively
+                                if backtrack():
+                                    return True
+
+                                # Undo move
+                                board[i][j] = "."
+
+                        # No number worked
+                        return False
+
+            # No empty cells left
+            return True
+
+
+        backtrack()
