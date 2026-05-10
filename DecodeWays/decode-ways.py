@@ -1,30 +1,29 @@
 class Solution(object):
-    def subsetsWithDup(self, nums):
+    def numDecodings(self, s):
         """
-        :type nums: List[int]
-        :rtype: List[List[int]]
+        :type s: str
+        :rtype: int
         """
 
-        nums.sort()
-        result = []
-        path = []
+        if not s or s[0] == "0":
+            return 0
 
-        def backtrack(start):
+        n = len(s)
 
-            result.append(path[:])
+        dp = [0] * (n + 1)
+        dp[0] = 1
+        dp[1] = 1
 
-            for i in range(start, len(nums)):
+        for i in range(2, n + 1):
 
-                # skip duplicates at same tree level
-                if i > start and nums[i] == nums[i - 1]:
-                    continue
+            # single digit
+            if s[i - 1] != "0":
+                dp[i] += dp[i - 1]
 
-                path.append(nums[i])
+            # two digits
+            two_digit = int(s[i - 2:i])
 
-                backtrack(i + 1)
+            if 10 <= two_digit <= 26:
+                dp[i] += dp[i - 2]
 
-                path.pop()
-
-        backtrack(0)
-
-        return result
+        return dp[n]
